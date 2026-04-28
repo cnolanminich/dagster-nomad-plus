@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.19.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dagster-nomad-plus"
+version = "0.1.0"
+description = "A Dagster integration for HashiCorp Nomad"
+authors = [{name = "Dagster Labs", email = "hello@dagsterlabs.com"}]
+license = "Apache-2.0"
+requires-python = ">=3.10,<3.15"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "dagster>=1.9.17",
+    "httpx>=0.28",
+]
+
+[project.urls]
+Homepage = "https://github.com/cnolanminich/dagster-nomad-plus"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["dagster_nomad_plus_tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["dagster_nomad_plus"]
