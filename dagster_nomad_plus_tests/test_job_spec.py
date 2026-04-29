@@ -25,6 +25,7 @@ def test_build_run_job_spec_basic():
     task = group["Tasks"][0]
     assert task["Driver"] == "docker"
     assert task["Config"]["image"] == "myorg/dagster:1.0"
+    assert task["Config"]["force_pull"] is False
     assert task["Env"]["FOO"] == "bar"
     assert "BAZ" in task["Env"]
     assert task["Resources"]["CPU"] == 1000
@@ -76,6 +77,17 @@ def test_build_server_job_spec_nomad_service_provider():
     assert group["Networks"][0]["DynamicPorts"][0]["Label"] == "grpc"
     assert group["Services"][0]["Provider"] == "nomad"
     assert group["Services"][0]["PortLabel"] == "grpc"
+
+
+def test_extra_task_config_can_override_force_pull():
+    spec = build_run_job_spec(
+        job_id="dagster-run-fp",
+        image="img",
+        command=["dagster"],
+        extra_task_config={"force_pull": True},
+    )
+    task = spec["TaskGroups"][0]["Tasks"][0]
+    assert task["Config"]["force_pull"] is True
 
 
 def test_encode_dispatch_payload_is_base64():

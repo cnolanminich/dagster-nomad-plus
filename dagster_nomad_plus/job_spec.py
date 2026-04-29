@@ -146,7 +146,12 @@ def _task(
     extra_config: Mapping[str, Any] | None = None,
     port_labels: Sequence[str] | None = None,
 ) -> dict[str, Any]:
-    config: dict[str, Any] = {"image": image}
+    # Set force_pull=false explicitly: matches the documented Nomad default,
+    # but Nomad 2.0 has been observed to re-pull when unset, which breaks
+    # cross-platform setups (e.g. amd64 image pre-pulled on an Apple-Silicon
+    # daemon — fresh pull resolves the manifest list to arm64 and fails).
+    # Callers can override via extra_config.
+    config: dict[str, Any] = {"image": image, "force_pull": False}
     if command:
         config["args"] = list(command)
     if mount_points:
